@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {normalizeQuote,validateQuote} from '../src/lib/quote.ts';
+const valid={profil:'particulier',depart:'Aulnay',arrivee:'Roncq',date:'',flexible:'oui',besoin:'achat',vehicule:'Peugeot 308',energie:'thermique',roulant:'oui',frequence:'ponctuel',volume:'',entreprise:'',nom:'Test',email:'test@example.com',telephone:'',notes:'',website:'',consent:true};
+test('a flexible request does not require an invented date or telephone',()=>assert.equal(validateQuote(valid),null));
+test('a fixed date cannot be missing or in the past',()=>{assert.match(validateQuote({...valid,flexible:'non'}),/date/);assert.match(validateQuote({...valid,date:'2000-01-01'}),/date/);});
+test('nonexistent calendar dates are rejected',()=>assert.match(validateQuote({...valid,date:'2099-02-31'}),/date/));
+test('professional requests need an organisation',()=>{assert.match(validateQuote({...valid,profil:'professionnel'}),/entreprise/);assert.equal(validateQuote({...valid,profil:'professionnel',entreprise:'Test SAS'}),null);});
+test('invalid email or absent privacy acknowledgement is rejected',()=>{assert.match(validateQuote({...valid,email:'invalid'}),/email/);assert.match(validateQuote({...valid,consent:false}),/confidentialité/);});
+test('the API rejects malformed or oversized fields',()=>{assert.equal(normalizeQuote(null),null);assert.equal(normalizeQuote({...valid,notes:'x'.repeat(2001)}),null);assert.equal(normalizeQuote({...valid,profil:123}),null);assert.deepEqual(normalizeQuote(valid),valid);});
+test('first step validation does not require later fields',()=>assert.equal(validateQuote({...valid,nom:'',email:'',vehicule:'',consent:false},1),null));

@@ -1,38 +1,45 @@
 # Relio
 
-Site de convoyage automobile pour particuliers et professionnels.
+Site de convoyage automobile en Next.js, React, TypeScript et Tailwind CSS.
 
-## Architecture
+## Pages
 
-- `/` : accueil particuliers, destination par défaut.
-- `/professionnels` : page dédiée aux concessions, marchands VO, loueurs et flottes, accessible dans le menu.
-- Navigation commune : Particuliers → `/`, Professionnels → `/professionnels`.
-- À prévoir : `/devis` pour les particuliers et `/devis?profil=professionnel` pour le parcours professionnel. Ces parcours ne sont pas encore implémentés.
+- `/` : particuliers — achat à distance, déménagement et rapatriement.
+- `/professionnels` : concessions, marchands VO, loueurs et flottes.
+- `/fonctionnement` : étapes et préparation d'une mission.
+- `/garanties` : état des lieux, organisation et couverture à confirmer.
+- `/devis` : formulaire en trois étapes, avec parcours professionnel via `?profil=professionnel` et besoins réguliers via `&frequence=regulier`.
+- `/contact`, `/mentions-legales`, `/confidentialite`.
 
-## Stack
+## Utilisation
 
-Next.js App Router, React, TypeScript et Tailwind CSS. Pages rendues côté serveur par défaut. Pas de backend séparé à ce stade.
-
-## Démarrage
-
-Node.js 22 LTS recommandé.
+Node.js 22.18+ ou 24 LTS.
 
 ```sh
-npm install
+npm ci
 npm run dev
 ```
 
-Validation : `npm run typecheck` et `npm run build`.
+```sh
+npm test
+npm run typecheck
+npm run build
+```
 
-## État
+La compilation utilise Webpack pour éviter la restriction des ports de processus auxiliaires de Turbopack dans certains environnements locaux.
 
-Socle technique avec deux pages et navigation. Le design final, les images, les formulaires et le déploiement restent à réaliser. Aucun formulaire ne simule une demande envoyée.
+## Réception des demandes
 
-## Direction artistique et contenu
+Par défaut, le formulaire est en démonstration. Il valide les informations et télécharge un récapitulatif sur l'appareil, sans envoi, stockage serveur ou réservation simulée. Les données restent en mémoire dans la page ; aucun stockage persistant navigateur n'est utilisé.
 
-Conserver la DA Relio validée : photographie automobile immersive, noir et blanc, accent rouge, typographie affirmée. La mise en page initiale est provisoire.
+L'API `/api/devis` est préparée pour transmettre les demandes à un endpoint HTTPS de réception email/CRM. Voir `.env.example` et `docs/marketing.md`. L'ouverture effective nécessite le paramétrage du destinataire, la finalisation des informations légales, une protection de débit persistante et un test réel de réception. Les flags `QUOTE_LIVE` et `LEGAL_READY` restent désactivés par défaut.
 
-Particuliers : achat à distance, rapatriement, déplacement d'un véhicule ; confiance et simplicité.
-Professionnels : transferts entre sites, récupérations, livraisons clients ; coordination et disponibilité.
+## Direction artistique
 
-Ne pas inventer de témoignages, chiffres, garanties, couverture d'assurance, suivi GPS ou délais. Décrire le recours aux convoyeurs partenaires honnêtement. Les recherches internes et données personnelles restent hors de ce dépôt.
+DA Relio approuvée : photographies immersives, noir/blanc cassé, accent rouge, mise en page éditoriale. Les deux images générées sont versionnées en WebP ; les originaux PNG restent locaux et sont ignorés par Git.
+
+## Vérifications
+
+Tests de validation : dates flexibles, dates impossibles/passées, profil professionnel, email, confidentialité, données malformées et limites de taille. Vérifications navigateur : navigation, mobile, préremplissage du trajet, étapes du formulaire et téléchargement en démonstration.
+
+Le site reste `noindex` pendant sa préparation. Aucun outil publicitaire ni service tiers de mesure d'audience installé. Les coordonnées légales, l'assurance et les engagements opérationnels doivent être confirmés avant publication commerciale.

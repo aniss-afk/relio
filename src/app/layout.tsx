@@ -1,27 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Header from "@/components/header";
+import { Footer } from "@/components/site";
 import "./globals.css";
-
-export const metadata: Metadata = {
-  title: { default: "Relio — Convoyage automobile", template: "%s | Relio" },
-  description: "Convoyage automobile pour particuliers et professionnels.",
-};
-
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <html lang="fr">
-      <body>
-        <a className="skip-link" href="#contenu">Aller au contenu</a>
-        <header>
-          <Link className="logo" href="/" aria-label="Relio, accueil particuliers">relio<span>.</span></Link>
-          <nav aria-label="Navigation principale">
-            <Link href="/">Particuliers</Link>
-            <Link href="/professionnels">Professionnels</Link>
-          </nav>
-        </header>
-        <main id="contenu">{children}</main>
-        <footer>Relio — Convoyage automobile</footer>
-      </body>
-    </html>
-  );
-}
+export const metadata: Metadata = {title:{default:"Relio — Votre voiture arrive. Votre journée continue.",template:"%s | Relio"},description:"Convoyage automobile pour particuliers et professionnels. Préparez votre trajet, en France ou à l’international.",robots:{index:false,follow:false}};
+export default function RootLayout({children}:Readonly<{children:React.ReactNode}>){return <html lang="fr"><body><a className="skip-link" href="#contenu">Aller au contenu</a><Header/><main id="contenu">{children}</main><Footer/></body></html>}

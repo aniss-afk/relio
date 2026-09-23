@@ -6,3 +6,6 @@ out/
 .DS_Store
 *.log
 *.tsbuildinfo
+
+# Original image masters remain local; optimized assets are versioned.
+public/images/*.png
